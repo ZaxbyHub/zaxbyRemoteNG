@@ -1,0 +1,169 @@
+/*
+ * zremote design tokens — single source of truth.
+ * Dark is the default theme; light and forced-colors override below.
+ * Values derive from the Windows 11 (WinUI 3) colour resources so the app reads as a
+ * native Windows surface, not as Fluent-web (Teams/Office) chrome.
+ * Implementation: map these 1:1 onto a custom Fluent UI React v9 Theme object
+ * (see DESIGN.md §12) and ALSO emit them as CSS custom properties on :root so
+ * non-Fluent surfaces (xterm.js theme, tree rows, canvas overlays) share them.
+ */
+
+:root {
+  color-scheme: dark;
+
+  /* ── Accent: replaced at runtime by the user's Windows accent (DESIGN.md §4.3) ── */
+  --accent: #60cdff;            /* SystemAccentColorLight2 — fills, selection pill, focus */
+  --accent-hover: #5abfee;
+  --accent-pressed: #54b2dd;
+  --accent-text: #99ebff;       /* SystemAccentColorLight3 — links, accent glyphs on dark */
+  --on-accent: #000000;
+  --accent-subtle: rgba(96, 205, 255, 0.14);   /* selected-row tint */
+
+  /* ── Surfaces (back to front) ── */
+  --mica: #202020;              /* window base under Mica; sidebar + status bar sit on it */
+  --mica-alt: #1a1a1a;          /* title bar / tab strip (Mica Alt) */
+  --layer: #272727;             /* content chrome: active tab, session bar, inspector */
+  --layer-alt: #2d2d2d;         /* nested layer: field groups, table headers */
+  --flyout: rgba(44, 44, 44, 0.96);  /* Acrylic stand-in for transient surfaces */
+  --dialog: #2b2b2b;
+  --dialog-footer: #202020;
+  --surface-session: #0c0c0c;   /* terminal / canvas backdrop (terminal theme may override) */
+  --smoke: rgba(0, 0, 0, 0.42); /* modal scrim */
+
+  /* ── Fills ── */
+  --fill-control: rgba(255, 255, 255, 0.061);
+  --fill-control-hover: rgba(255, 255, 255, 0.084);
+  --fill-control-pressed: rgba(255, 255, 255, 0.033);
+  --fill-control-disabled: rgba(255, 255, 255, 0.042);
+  --fill-input: rgba(30, 30, 30, 0.7);
+  --fill-subtle-hover: rgba(255, 255, 255, 0.061);
+  --fill-subtle-pressed: rgba(255, 255, 255, 0.042);
+  --fill-subtle-selected: rgba(255, 255, 255, 0.084);
+
+  /* ── Strokes ── */
+  --stroke-control: rgba(255, 255, 255, 0.07);
+  --stroke-control-strong: rgba(255, 255, 255, 0.545);  /* input bottom edge, checkbox */
+  --stroke-divider: rgba(255, 255, 255, 0.084);
+  --stroke-layer: rgba(0, 0, 0, 0.38);                   /* edge between mica and layer */
+  --stroke-flyout: rgba(255, 255, 255, 0.1);
+  --stroke-focus-outer: #ffffff;
+  --stroke-focus-inner: rgba(0, 0, 0, 0.7);
+
+  /* ── Text ── */
+  --text-1: #ffffff;
+  --text-2: rgba(255, 255, 255, 0.786);
+  --text-3: rgba(255, 255, 255, 0.545);
+  --text-disabled: rgba(255, 255, 255, 0.363);
+
+  /* ── Semantic state (state only; always paired with a shape glyph + text) ── */
+  --ok: #6ccb5f;        --ok-bg: #393d1b;
+  --warn: #fce100;      --warn-bg: #433519;
+  --danger: #ff99a4;    --danger-bg: #442726;
+  --info: var(--accent-text);  --info-bg: rgba(96, 205, 255, 0.1);
+  --neutral-state: rgba(255, 255, 255, 0.545);
+
+  /* ── Environment markers (user-assigned per folder; meaning = "where am I") ── */
+  --env-red: #f1707b;  --env-orange: #f7a65e;  --env-yellow: #e8d44d;  --env-green: #6ccb5f;
+  --env-teal: #4cc2c4; --env-blue: #6cb8f6;    --env-purple: #b4a0ff;  --env-pink: #ee7fc2;
+
+  /* ── Elevation (transient surfaces only) ── */
+  --shadow-flyout: 0 8px 16px rgba(0, 0, 0, 0.26);
+  --shadow-dialog: 0 32px 64px rgba(0, 0, 0, 0.37), 0 2px 21px rgba(0, 0, 0, 0.37);
+  --shadow-tooltip: 0 4px 8px rgba(0, 0, 0, 0.26);
+
+  /* ── Geometry ── */
+  --radius-control: 4px;
+  --radius-overlay: 8px;
+  --radius-window: 8px;     /* drawn by DWM, listed for mockups only */
+  --radius-pill: 999px;
+
+  --space-1: 2px;  --space-2: 4px;  --space-3: 6px;  --space-4: 8px;
+  --space-5: 12px; --space-6: 16px; --space-7: 20px; --space-8: 24px; --space-9: 32px;
+
+  --h-titlebar: 40px;
+  --h-tab: 32px;
+  --h-sessionbar: 36px;
+  --h-statusbar: 24px;
+  --h-control: 32px;
+  --h-control-sm: 24px;
+  --h-row: 28px;            /* tree/list row — density dependent */
+  --w-sidebar: 280px;       /* resizable 200–480 */
+  --w-inspector: 348px;     /* resizable 300–520 */
+  --w-caption-button: 46px;
+  --tree-indent: 16px;
+
+  /* ── Type ── */
+  --font-ui: "Segoe UI Variable Text", "Segoe UI Variable", "Segoe UI", Inter, system-ui, sans-serif;
+  --font-display: "Segoe UI Variable Display", "Segoe UI Variable", "Segoe UI", Inter, system-ui, sans-serif;
+  --font-mono: "Cascadia Mono", "Cascadia Code", Consolas, "DejaVu Sans Mono", monospace;
+  --type-caption: 400 12px/16px var(--font-ui);
+  --type-body: 400 14px/20px var(--font-ui);
+  --type-body-strong: 600 14px/20px var(--font-ui);
+  --type-subtitle: 600 20px/28px var(--font-display);
+  --type-title: 600 28px/36px var(--font-display);
+  --type-mono: 400 12.5px/18px var(--font-mono);
+  --type-mono-sm: 400 12px/16px var(--font-mono);
+
+  /* ── Motion (user-triggered only) ── */
+  --dur-instant: 0ms;
+  --dur-fast: 83ms;       /* hover/press colour changes */
+  --dur-normal: 167ms;    /* flyout/palette open, pane resize settle */
+  --dur-slow: 250ms;      /* dialog open, inspector slide — never longer */
+  --ease-out: cubic-bezier(0, 0, 0, 1);         /* entrances */
+  --ease-in: cubic-bezier(1, 0, 1, 1);          /* exits */
+  --ease-standard: cubic-bezier(0.55, 0.55, 0, 1);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --accent: #005fb8;  --accent-hover: #1a6fc0;  --accent-pressed: #337fc7;
+  --accent-text: #003e92;  --on-accent: #ffffff;  --accent-subtle: rgba(0, 95, 184, 0.1);
+
+  --mica: #f3f3f3;  --mica-alt: #e9e9e9;  --layer: #f9f9f9;  --layer-alt: #f4f4f4;
+  --flyout: rgba(249, 249, 249, 0.96);  --dialog: #ffffff;  --dialog-footer: #f3f3f3;
+  --surface-session: #0c0c0c;  --smoke: rgba(0, 0, 0, 0.3);
+
+  --fill-control: rgba(255, 255, 255, 0.7);  --fill-control-hover: rgba(249, 249, 249, 0.5);
+  --fill-control-pressed: rgba(249, 249, 249, 0.3);  --fill-control-disabled: rgba(249, 249, 249, 0.3);
+  --fill-input: rgba(255, 255, 255, 0.85);
+  --fill-subtle-hover: rgba(0, 0, 0, 0.037);  --fill-subtle-pressed: rgba(0, 0, 0, 0.024);
+  --fill-subtle-selected: rgba(0, 0, 0, 0.055);
+
+  --stroke-control: rgba(0, 0, 0, 0.09);  --stroke-control-strong: rgba(0, 0, 0, 0.446);
+  --stroke-divider: rgba(0, 0, 0, 0.08);  --stroke-layer: rgba(0, 0, 0, 0.09);
+  --stroke-flyout: rgba(0, 0, 0, 0.06);
+  --stroke-focus-outer: rgba(0, 0, 0, 0.9);  --stroke-focus-inner: #ffffff;
+
+  --text-1: rgba(0, 0, 0, 0.896);  --text-2: rgba(0, 0, 0, 0.606);
+  --text-3: rgba(0, 0, 0, 0.446);  --text-disabled: rgba(0, 0, 0, 0.361);
+
+  --ok: #0f7b0f;  --ok-bg: #dff6dd;  --warn: #9d5d00;  --warn-bg: #fff4ce;
+  --danger: #c42b1c;  --danger-bg: #fde7e9;  --info-bg: rgba(0, 95, 184, 0.08);
+  --neutral-state: rgba(0, 0, 0, 0.446);
+
+  --env-red: #c42b1c;  --env-orange: #c25700;  --env-yellow: #8a6d00;  --env-green: #0f7b0f;
+  --env-teal: #00757a; --env-blue: #005fb8;    --env-purple: #6b4fd8;  --env-pink: #b32e8a;
+
+  --shadow-flyout: 0 8px 16px rgba(0, 0, 0, 0.14);
+  --shadow-dialog: 0 32px 64px rgba(0, 0, 0, 0.19), 0 2px 21px rgba(0, 0, 0, 0.15);
+  --shadow-tooltip: 0 4px 8px rgba(0, 0, 0, 0.14);
+}
+
+/* Density: set data-density on :root. "standard" is the default. */
+:root[data-density="compact"]     { --h-row: 24px; --h-sessionbar: 32px; --tree-indent: 14px; }
+:root[data-density="comfortable"] { --h-row: 32px; --h-control: 32px; --tree-indent: 20px; }
+
+/* Windows contrast themes: hand colour to the system, keep geometry. */
+@media (forced-colors: active) {
+  :root {
+    --mica: Canvas; --mica-alt: Canvas; --layer: Canvas; --layer-alt: Canvas; --dialog: Canvas;
+    --flyout: Canvas; --text-1: CanvasText; --text-2: CanvasText; --text-3: GrayText;
+    --accent: Highlight; --on-accent: HighlightText; --accent-text: LinkText;
+    --stroke-control: CanvasText; --stroke-divider: CanvasText; --stroke-layer: CanvasText;
+    --ok: CanvasText; --warn: CanvasText; --danger: CanvasText;   /* shape glyph + text carry state */
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur-fast: 0ms; --dur-normal: 0ms; --dur-slow: 0ms; }
+}
